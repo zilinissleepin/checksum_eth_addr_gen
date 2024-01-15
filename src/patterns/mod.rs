@@ -39,7 +39,7 @@ fn read_patterns(matches: &ArgMatches) -> Vec<String> {
     }
 }
 
-fn parse_patterns<P: Pattern + std::fmt::Debug>(buffer_writer: Arc<Mutex<BufferWriter>>,
+fn parse_patterns<P: Pattern>(buffer_writer: Arc<Mutex<BufferWriter>>,
                               matches: &ArgMatches)
                               -> Vec<P> {
     // TODO: Use rayon (everywhere)
@@ -55,7 +55,6 @@ fn parse_patterns<P: Pattern + std::fmt::Debug>(buffer_writer: Arc<Mutex<BufferW
 
         match <P as Pattern>::parse(&raw_pattern) {
             Ok(pattern) => {
-                // println!("push: {:#?}", &pattern);
                 vec.push(pattern)
             }
 
