@@ -12,6 +12,7 @@ extern crate termcolor;
 #[macro_use]
 extern crate generic_array;
 extern crate typenum;
+extern crate eth_checksum;
 
 #[macro_use]
 mod macros;
@@ -29,6 +30,7 @@ use regex::Regex;
 use secp256k1::Secp256k1;
 use termcolor::{Color, ColorChoice, Buffer, BufferWriter};
 use typenum::U40;
+// use eth_checksum;
 
 type AddressLengthType = U40;
 
@@ -38,7 +40,7 @@ const KECCAK_OUTPUT_BYTES: usize = 32;
 const ADDRESS_BYTE_INDEX: usize = KECCAK_OUTPUT_BYTES - ADDRESS_BYTES;
 
 lazy_static! {
-    static ref ADDRESS_PATTERN: Regex = Regex::new(r"^[0-9a-f]{1,40}$").unwrap();
+    static ref ADDRESS_PATTERN: Regex = Regex::new(r"^[0-9a-fA-F]{1,40}$").unwrap();
 }
 
 struct BruteforceResult {
@@ -219,6 +221,8 @@ fn main_pattern_type_selected<P: Patterns + 'static>(matches: ArgMatches,
                     let public_key_array = &public_key.serialize_vec(&alg, false)[1..];
                     let keccak = tiny_keccak::keccak256(public_key_array);
                     let address = to_hex_string(&keccak[ADDRESS_BYTE_INDEX..], 40);  // get rid of the constant 0x04 byte
+                    let address = eth_checksum::checksum(&address).split_at(2).1.to_string();
+                    // print!("{:#?}", &address);
 
                     if patterns.contains(&address) {
                         *result.lock().unwrap() = Some(BruteforceResult {

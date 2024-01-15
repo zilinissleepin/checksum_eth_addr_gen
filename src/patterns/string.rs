@@ -13,7 +13,10 @@ impl Pattern for String {
     }
 
     fn parse<T: AsRef<str>>(string: T) -> Result<Self, String> {
-        let string = string.as_ref().to_lowercase();
+        // let string = string.as_ref().to_lowercase();
+        let string = string.as_ref().to_string();
+
+        // println!("parse: {:#?}", &string);
 
         if !ADDRESS_PATTERN.is_match(&string) {
             return Err("Pattern contains invalid characters".to_string());
@@ -31,6 +34,7 @@ pub struct StringPatterns {
 impl StringPatterns {
     pub fn new(buffer_writer: Arc<Mutex<BufferWriter>>, matches: &ArgMatches) -> StringPatterns {
         let patterns = parse_patterns::<String>(buffer_writer, matches);
+        // println!("{:#?}", &patterns);
         let patterns_by_len: Arc<GenericArray<Mutex<Option<Vec<String>>>, AddressLengthType>> = Arc::new(arr![Mutex<Option<Vec<String>>>; Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None), Mutex::new(None)]);
 
         patterns.par_iter()
