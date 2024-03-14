@@ -311,7 +311,7 @@ fn main_pattern_type_selected<P: Patterns + 'static>(matches: ArgMatches,
             cprintln!(quiet,
                       stdout,
                       Color::Green,
-                      "Buy me a cup of coffee; my ethereum address: 0xc0ffee3bd37d408910ecab316a07269fc49a20ee");
+                      "Buy me a cup of coffee; my ethereum address: 0x777777775a09c9aD5b63B62918023272389Fa9ce. Special thanks to the original author: 0xc0ffee3bd37d408910ecab316a07269fc49a20ee.");
             cprintln!(quiet,
                       stdout,
                       Color::White,
